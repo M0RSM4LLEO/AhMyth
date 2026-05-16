@@ -4,4 +4,4 @@ I am not responsible for any damage or harm that may happen due to misuse of thi
 &nbsp;
 
 # <div align="center">Message</div>
-The most up to date contents of my previous AhMyth Repo will ve uplpaded in due time, I just need to update a few things in order to adhere to GitHub's Terms and Conditions. Apologies for any inconvenience.
+The most up to date contents of my previous AhMyth Repo will be uplpaded in due time, I just need to update a few things in order to adhere to GitHub's Terms and Conditions. Apologies for any inconvenience.
