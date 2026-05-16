@@ -5,3 +5,5 @@ I am not responsible for any damage or harm that may happen due to misuse of thi
 
 # <div align="center">Message</div>
 The most up to date contents of my previous AhMyth Repo will be uploaded in due time, I just need to update a few things in order to adhere to GitHub's Terms and Conditions. Apologies for any inconvenience.
+
+To also further adhere to GitHub's Terms and Conditions, I will no longer be uploading precompiled binaries. I will instead be utilisong the Actions feature to build binaries from now on.
