@@ -1,0 +1,148 @@
+#!/bin/sh
+
+# Get the path to the script's directory
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Check package manager
+if [ -x "$(command -v apt-get)" ]; then
+    PACKAGE_MANAGER="apt-get"
+elif [ -x "$(command -v pacman)" ]; then
+    PACKAGE_MANAGER="pacman"
+else
+    echo "Unsupported package manager.\nThis script currently supports APT and Pacman-based systems."
+    exit 1
+fi
+
+java_install() {
+    echo_color "Installing default JDK..."
+    if [ "$PACKAGE_MANAGER" = "apt-get" ]; then
+        apt-get install -y default-jdk
+    elif [ "$PACKAGE_MANAGER" = "pacman" ]; then
+        pacman -Sy jdk-openjdk
+    fi
+    echo_color "Default JDK has been installed successfully."
+    sleep 2
+}
+
+nodejs_install() {
+    echo "Installing Node.js...\n"
+    if [ "$PACKAGE_MANAGER" = "apt-get" ]; then
+        apt-get install -y nodejs
+    elif [ "$PACKAGE_MANAGER" = "pacman" ]; then
+        pacman -Sy nodejs
+    fi
+    echo "\nNode.js has been installed successfully."
+    sleep 2
+    clear
+}
+
+npm_install() {
+    echo "Installing npm...\n"
+    if [ "$PACKAGE_MANAGER" = "apt-get" ]; then
+        apt-get install -y npm
+    elif [ "$PACKAGE_MANAGER" = "pacman" ]; then
+        pacman -Sy npm
+    fi
+    echo "\nnpm has been installed successfully."
+    sleep 2
+    clear
+}
+
+git_install() {
+    echo "Installing Git...\n"
+    if [ "$PACKAGE_MANAGER" = "apt-get" ]; then
+        apt-get install -y git
+    elif [ "$PACKAGE_MANAGER" = "pacman" ]; then
+        pacman -Sy git
+    fi
+    echo "\nGit has been installed successfully."
+    sleep 2
+    clear
+}
+
+create_system_shortcut() {
+    # Create ahmyth file and grant executable permissions
+    echo "Creating ahmyth file and granting executable permissions...\n"
+    echo '#!/bin/sh' > ahmyth
+    echo "if [ \"\$(id -u)\" = \"0\" ]; then" >> ahmyth
+    echo "    npx electron \"$SCRIPT_DIR/app\" --no-sandbox start" >> ahmyth
+    echo "else" >> ahmyth
+    echo "    npm start --prefix \"$SCRIPT_DIR\"" >> ahmyth
+    echo "fi" >> ahmyth
+    chmod +x ahmyth
+    echo "ahmyth file has been created and executable permissions have been granted."
+    sleep 2
+    clear
+
+    # Move ahmyth file to /usr/local/sbin
+    echo "Moving ahmyth file to /usr/local/sbin...\n"
+    if [ -d "/usr/local/sbin" ]; then
+        mv ahmyth /usr/local/sbin
+        echo "\nahmyth file has been moved to /usr/local/sbin."
+    else
+        echo "/usr/local/sbin directory not found! Unable to move ahmyth file."
+    fi
+    sleep 2
+    clear
+}
+
+# Check if user is root
+if [ "$(id -u)" != "0" ]; then
+    echo -e "This script must be run as root!" >&2
+    exit 1
+fi
+
+# Update and upgrade
+clear
+echo "Updating and Upgrading...\n"
+if [ "$PACKAGE_MANAGER" = "apt-get" ]; then
+    apt-get update && apt-get upgrade -y
+elif [ "$PACKAGE_MANAGER" = "pacman" ]; then
+    pacman -Syu --noconfirm
+fi
+echo "\nUpdate and Upgrade done."
+sleep 2
+clear
+
+# Check if any version of java 8 through 21 is installed
+if [ "$PACKAGE_MANAGER" = "apt-get" ]; then
+    if [ -z "$(dpkg -l | grep openjdk- | grep -E '8|9|10|11|12|13|14|15|16|17|18|19|20|21')" ]; then
+        echo_color "Java is not installed!"
+        java_install
+    fi
+elif [ "$PACKAGE_MANAGER" = "pacman" ]; then
+    if ! pacman -Qi jdk-openjdk >/dev/null 2>&1; then
+        echo_color "Java version 8 to Java version 21 is not installed!"
+        java_install
+    fi
+fi
+
+# Check if nodejs is installed
+if [ -z "$(command -v node)" ]; then
+    echo "Node.js is not installed!\n" >&2
+    nodejs_install
+fi
+
+# Check if npm is installed
+if [ -z "$(command -v npm)" ]; then
+    echo "npm is not installed!\n" >&2
+    npm_install
+fi
+
+# Check if git is installed
+if [ -z "$(command -v git)" ]; then
+    echo "Git is not installed!\n" >&2
+    git_install
+fi
+
+# Check if ahmyth system shortcut exists, create it if not
+if [ -z "$(command -v ahmyth)" ]; then
+    echo "ahmyth system shortcut doesn't exist!\n"
+    create_system_shortcut
+fi
+
+# Check if all dependencies are installed
+if [ -x "$(command -v node)" ] && [ -x "$(command -v npm)" ] && [ -x "$(command -v git)" ] && [ -f "/usr/local/sbin/ahmyth" ]; then
+    echo "All Dependencies are Installed.\nExiting."
+    exit 0
+fi
