@@ -14,6 +14,10 @@
 I am not responsible for any damage or harm that may happen due to misuse of this project. If malicious use is of this project is spotted I will personally pull this repo from Public View and keep it that way until people learn.
 #
 
+# <div align="Center">Message</div>
+Please wait patiently while I redo the entire AhMyth Wiki which includes the setup instructions pages. Thanks to Github this was one thing I couldn't restore.
+#
+
 Give this repository a 💫 to support the project.
 
 This tool is recommended for professionals who know what they are doing.
